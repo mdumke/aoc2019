@@ -27,17 +27,11 @@ def compute_module_fuel(mass: int) -> int:
         mass (int): The mass of the module.
 
     Returns:
-        int: The fuel required to launch the module. This is at least 0.
+        int: The fuel required to launch the module.
     """
     fuel = mass // 3 - 2
-    additional_fuel = fuel
 
-    while True:
-        additional_fuel = additional_fuel // 3 - 2
+    if fuel <= 0:
+        return 0
 
-        if additional_fuel <= 0:
-            break
-
-        fuel += additional_fuel
-
-    return fuel
+    return fuel + compute_module_fuel(fuel)

@@ -1,4 +1,3 @@
-import time
 from unittest import TestCase
 from lib import compute_module_fuel_naive, compute_module_fuel
 

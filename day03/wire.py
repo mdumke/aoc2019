@@ -19,7 +19,7 @@ def find_crossings(wire1: List[Tuple], wire2: List[Tuple]) -> List[Dict]:
 
     Example:
 
-    >>> find_crossings([('U', 1)], ['U', 1])
+    >>> find_crossings([('U', 1), ('U', 1)])
     [{
         'crossing': (0, 1),
         'dist': 1,

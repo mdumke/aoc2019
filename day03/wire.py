@@ -27,11 +27,9 @@ def find_crossings(wire1: List[Tuple], wire2: List[Tuple]) -> List[Dict]:
     }]
     """
     crossings = []
-    wire1_coords = {}
 
     # collect wire1 coordinates
-    for coord, steps in get_wire_coordinates(wire1):
-        wire1_coords[coord] = steps
+    wire1_coords = dict(get_wire_coordinates(wire1))
 
     # compare wire2 coordinates to find crossing points
     for coord, steps in get_wire_coordinates(wire2):

@@ -20,7 +20,11 @@ def find_crossings(wire1: List[Tuple], wire2: List[Tuple]) -> List[Dict]:
     Example:
 
     >>> find_crossings([('U', 1)], ['U', 1])
-    {'crossing': (0, 1), 'dist': 1, 'steps': 2}
+    [{
+        'crossing': (0, 1),
+        'dist': 1,
+        'steps': 2
+    }]
     """
     crossings = []
     wire1_coords = {}
@@ -40,7 +44,7 @@ def find_crossings(wire1: List[Tuple], wire2: List[Tuple]) -> List[Dict]:
     return crossings
 
 
-def get_wire_coordinates(wire):
+def get_wire_coordinates(wire: List[Tuple]) -> Tuple[Tuple, int]:
     """Yield all positions on the grid covered by the wire."""
     i = 0
     pos = (0, 0)
@@ -52,7 +56,7 @@ def get_wire_coordinates(wire):
             yield pos, i
 
 
-def get_next_coord(position, direction):
+def get_next_coord(position: Tuple, direction: str) -> Tuple:
     """Return the position after taking one step in 'direction'."""
     steps = {
         'U': (0, 1),
@@ -63,12 +67,12 @@ def get_next_coord(position, direction):
     return tuple([i + j for i, j in zip(position, steps[direction])])
 
 
-def manhattan(coord):
+def manhattan(coord: Tuple) -> int:
     """Return manhattan distance of coordinate from the origin."""
     return abs(coord[0]) + abs(coord[1])
 
 
-def deserialize_wire(wire):
+def deserialize_wire(wire: str) -> List[Tuple]:
     """Parse the given string into a tuple representation."""
     return [(s[0], int(s[1:])) for s in wire.split(',')]
 

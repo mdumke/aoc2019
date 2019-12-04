@@ -28,10 +28,7 @@ def has_duplicate(digits):
 
 def has_strict_duplicate(digits):
     counts = Counter(digits)
-    for count in counts.values():
-        if count == 2:
-            return True
-    return False
+    return any(count == 2 for count in counts.values())
 
 if __name__ == '__main__':
     print(f'part 1: {num_valid_passwords(*RANGE, strict=False)}')

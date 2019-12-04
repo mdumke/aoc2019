@@ -15,10 +15,7 @@ def is_valid(password, strict):
         return is_non_decreasing(digits) and has_duplicate(digits)
 
 def is_non_decreasing(digits):
-    for i in range(len(digits) - 1):
-        if digits[i] > digits[i + 1]:
-            return False
-    return True
+    return all(i <= j for i, j in zip(digits[:-1], digits[1:]))
 
 def has_duplicate(digits):
     return any(count >= 2 for count in Counter(digits).values())

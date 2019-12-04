@@ -4,24 +4,27 @@ from collections import Counter
 
 RANGE = (240920, 789857)
 
-def num_valid_passwords(lo, hi, strict):
-    return sum(is_valid(pw, strict) for pw in range(lo, hi))
 
-def is_valid(password, strict):
-    digits = [int(n) for n in list(str(password))]
+def count_valid_passwords(lo: int, hi: int, strict: bool) -> int:
+    """Return number of passwords in range that are valid."""
+    return sum(is_valid_password(str(pw), strict) for pw in range(lo, hi))
+
+
+def is_valid_password(pw: str, strict: bool) -> bool:
+    """Return True if password fulfills specified criteria."""
+    # check non-decreasing condition
+    if any(i > j for i, j in zip(pw[:-1], pw[1:])):
+        return False
+
+    digit_counts = Counter(pw).values()
+
     if strict:
-        return is_non_decreasing(digits) and has_strict_duplicate(digits)
+        # check for strict duplicates
+        return any(c == 2 for c in digit_counts)
     else:
-        return is_non_decreasing(digits) and has_duplicate(digits)
+        # check for duplicates
+        return any(c >= 2 for c in digit_counts)
 
-def is_non_decreasing(digits):
-    return all(i <= j for i, j in zip(digits[:-1], digits[1:]))
-
-def has_duplicate(digits):
-    return any(count >= 2 for count in Counter(digits).values())
-
-def has_strict_duplicate(digits):
-    return any(count == 2 for count in Counter(digits).values())
 
 if __name__ == '__main__':
     print(f'part 1: {num_valid_passwords(*RANGE, strict=False)}')

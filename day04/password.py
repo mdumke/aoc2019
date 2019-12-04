@@ -34,5 +34,5 @@ def has_strict_duplicate(digits):
     return False
 
 if __name__ == '__main__':
-    print(f'part 1: {num_valid_passwords(*RANGE)}')
+    print(f'part 1: {num_valid_passwords(*RANGE, strict=False)}')
     print(f'part 2: {num_valid_passwords(*RANGE, strict=True)}')

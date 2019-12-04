@@ -27,5 +27,5 @@ def is_valid_password(pw: str, strict: bool) -> bool:
 
 
 if __name__ == '__main__':
-    print(f'part 1: {num_valid_passwords(*RANGE, strict=False)}')
-    print(f'part 2: {num_valid_passwords(*RANGE, strict=True)}')
+    print(f'part 1: {count_valid_passwords(*RANGE, strict=False)}')
+    print(f'part 2: {count_valid_passwords(*RANGE, strict=True)}')

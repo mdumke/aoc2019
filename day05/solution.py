@@ -8,4 +8,5 @@ def get_input():
 
 if __name__ == '__main__':
     code = get_input()
-    print(f'part 1: diagnostic code: {execute(code)[-1]}')
+    print(f'part 1: diagnostic code: {execute(code[:], iter([1]))[-1]}')
+    print(f'part 2: diagnostic code: {execute(code[:], iter([5]))[-1]}')

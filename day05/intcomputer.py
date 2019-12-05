@@ -20,7 +20,7 @@ def execute(code: List[int], input_: Iterable[int] = None) -> List[int]:
     >>>
     # multiply input 3 by 2
     execute([3, 9, 1002, 9, 2, 10, 4, 10, 99, 0, 0], iter([3]))
-    6
+    [6]
     """
     def parse_instruction(ip):
         opcode = code[ip] % 100

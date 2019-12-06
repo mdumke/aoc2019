@@ -8,7 +8,7 @@ Compute checksum and number of hops on an orbital map. Main entry point is ``sol
 .. code:: sh
 
   # usage
-  python solution.py
+  python solution.py < input.txt
 
   # run test suite
   python -m unittest test.py

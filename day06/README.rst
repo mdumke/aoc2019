@@ -121,6 +121,7 @@ Visually, the above map of orbits looks like this:
 In this example, YOU are in orbit around K, and SAN is in orbit around I. To move from K to I, a minimum of 4 orbital transfers are required:
 
 ::
+
   K to J
   J to E
   E to D

@@ -13,10 +13,26 @@ def count_orbital_transfers(orbit_map, start, target) -> int:
         int: The number of orbital transfers (hops) from the starting
             orbit the the target's orbit.
     """
-    # build up a routing table for the orbit map
-    visited = set()
+    # strategy: build a routing table for the start node, then
+    # backtrack the path from target to start
+    routes = build_routing_table(orbit_map, start)
+
+    current = target
+    hops = 0
+
+    while current != start:
+        current = routes[current]
+        hops += 1
+
+    # do not count the two orbiting entities
+    return hops - 2
+
+
+def build_routing_table(graph, start) -> Dict:
+    """Return a routing table the given starting node."""
     routes = {}
 
+    visited = set()
     fringe = []
     fringe.append((start, None))
 
@@ -29,19 +45,11 @@ def count_orbital_transfers(orbit_map, start, target) -> int:
         visited.add(node)
         routes[node] = parent
 
-        for neighbor in orbit_map[node]:
+        for neighbor in graph[node]:
             if neighbor not in visited:
                 fringe.append((neighbor, node))
 
-    # backtrack path from target to start
-    current = target
-    hops = 0
-
-    while current != start:
-        current = routes[current]
-        hops += 1
-
-    return hops - 2
+    return routes
 
 
 def compute_checksum(orbit, start) -> int:

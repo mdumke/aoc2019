@@ -5,7 +5,7 @@ Day 6: Universal Orbit Map
 Compute checksum and number of hops on an orbital map. Main entry point is ``solution.py``, and the main logic is implemented in ``orbit.py``.
 
 
-.. code::sh
+.. code:: sh
 
   # usage
   python solution.py

@@ -29,7 +29,12 @@ def count_orbital_transfers(orbit_map, start, target) -> int:
 
 
 def build_routing_table(graph, start) -> Dict:
-    """Return a routing table for the given starting node."""
+    """Return a routing table for the given starting node.
+
+    A routing table captures node-parent relationships within a graph.
+    It can be used to identify paths from any given node to the
+    starting node.
+    """
     routes = {}
 
     visited = set()

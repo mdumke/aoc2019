@@ -16,16 +16,22 @@ def count_orbital_transfers(orbit_map, start, target) -> int:
     # strategy: build a routing table for the start node, then
     # backtrack the path from target to start
     routes = build_routing_table(orbit_map, start)
+    path = find_path(routes, target)
 
+    # do not count start and target as hops
+    return len(path) - 3
+
+
+def find_path(routes, target):
+    """Return a path to from route's start to target node."""
+    path = []
     current = target
-    hops = 0
 
-    while current != start:
+    while current:
+        path.append(current)
         current = routes[current]
-        hops += 1
 
-    # do not count the two orbiting entities
-    return hops - 2
+    return path
 
 
 def build_routing_table(graph, start) -> Dict:
@@ -59,24 +65,12 @@ def build_routing_table(graph, start) -> Dict:
 
 def compute_checksum(orbit, start) -> int:
     """Return sum of direct and indirect orbits."""
+    routes = build_routing_table(orbit, start)
     checksum = 0
 
-    visited = set()
-    fringe = []
-    fringe.append((start, None, 0))
-
-    while fringe:
-        node, parent, depth = fringe.pop(0)
-
-        if node in visited:
-            continue
-
-        visited.add(node)
-        checksum += depth
-
-        for neighbor in orbit[node]:
-            if neighbor not in visited:
-                fringe.append((neighbor, node, depth + 1))
+    for node in orbit.keys():
+        path = find_path(routes, node)
+        checksum += len(path) - 1
 
     return checksum
 

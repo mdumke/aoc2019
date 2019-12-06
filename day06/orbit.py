@@ -82,13 +82,10 @@ def parse_input(orbit_map: str) -> Dict:
     graph = {}
 
     for source, target in edges:
-        if not graph.get(source):
-            graph[source] = []
-
-        if not graph.get(target):
-            graph[target] = []
-
+        graph[source] = graph.get(source) or []
         graph[source].append(target)
+
+        graph[target] = graph.get(target) or []
         graph[target].append(source)
 
     return graph

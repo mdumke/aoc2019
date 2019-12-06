@@ -13,13 +13,11 @@ def count_orbital_transfers(orbit_map, start, target) -> int:
         int: The number of orbital transfers (hops) from the starting
             orbit the the target's orbit.
     """
-    # strategy: build a routing table for the start node, then
-    # backtrack the path from target to start
     routes = build_routing_table(orbit_map, start)
     path = find_path(routes, target)
 
     # do not count start and target as hops
-    return len(path) - 3
+    return len(path) - 2
 
 
 def find_path(routes, target):
@@ -31,7 +29,8 @@ def find_path(routes, target):
         path.append(current)
         current = routes[current]
 
-    return path
+    # ignore the starting node itself
+    return path[1:]
 
 
 def build_routing_table(graph, start) -> Dict:
@@ -63,14 +62,14 @@ def build_routing_table(graph, start) -> Dict:
     return routes
 
 
-def compute_checksum(orbit, start) -> int:
+def compute_checksum(orbit_map, start) -> int:
     """Return sum of direct and indirect orbits."""
-    routes = build_routing_table(orbit, start)
+    routes = build_routing_table(orbit_map, start)
     checksum = 0
 
-    for node in orbit.keys():
+    for node in orbit_map.keys():
         path = find_path(routes, node)
-        checksum += len(path) - 1
+        checksum += len(path)
 
     return checksum
 

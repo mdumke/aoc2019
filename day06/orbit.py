@@ -29,7 +29,7 @@ def count_orbital_transfers(orbit_map, start, target) -> int:
 
 
 def build_routing_table(graph, start) -> Dict:
-    """Return a routing table the given starting node."""
+    """Return a routing table for the given starting node."""
     routes = {}
 
     visited = set()

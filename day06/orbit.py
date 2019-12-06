@@ -14,7 +14,7 @@ def count_orbital_transfers(orbit_map: Graph, start: str, target: str) -> int:
 
     Returns:
         int: The number of orbital transfers (hops) from the starting
-            orbit the the target's orbit.
+            orbit to the target's orbit.
     """
     routes = build_routing_table(orbit_map, start)
     path = find_path(routes, target)

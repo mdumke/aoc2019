@@ -1,6 +1,9 @@
-from typing import Dict
+from typing import List, Dict
 
-def count_orbital_transfers(orbit_map, start, target) -> int:
+Graph = Dict[str, List[str]]
+Table = Dict[str, str]
+
+def count_orbital_transfers(orbit_map: Graph, start: str, target: str) -> int:
     """Return the number of hops beween node's and target's orbit.
 
     Args:
@@ -20,7 +23,7 @@ def count_orbital_transfers(orbit_map, start, target) -> int:
     return len(path) - 2
 
 
-def find_path(routes, target):
+def find_path(routes: Table, target: str) -> List[str]:
     """Return a path to from route's start to target node."""
     path = []
     current = target
@@ -33,7 +36,7 @@ def find_path(routes, target):
     return path[1:]
 
 
-def build_routing_table(graph, start) -> Dict:
+def build_routing_table(graph: Graph, start: str) -> Table:
     """Return a routing table for the given starting node.
 
     A routing table captures node-parent relationships within a graph.
@@ -62,7 +65,7 @@ def build_routing_table(graph, start) -> Dict:
     return routes
 
 
-def compute_checksum(orbit_map, start) -> int:
+def compute_checksum(orbit_map: Graph, start: str) -> int:
     """Return sum of direct and indirect orbits."""
     routes = build_routing_table(orbit_map, start)
     checksum = 0
@@ -74,7 +77,7 @@ def compute_checksum(orbit_map, start) -> int:
     return checksum
 
 
-def parse_input(orbit_map: str) -> Dict:
+def parse_input(orbit_map: str) -> Graph:
     """Return an adjacency list representation of the orbit map."""
     edges = [line.strip().split(')') for line in orbit_map.split('\n')]
 

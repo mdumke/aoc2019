@@ -78,7 +78,7 @@ def parse_input(orbit_map: str) -> Dict:
     """Return an adjacency list representation of the orbit map."""
     edges = [line.strip().split(')') for line in orbit_map.split('\n')]
 
-    # create an orbit map as an unweighted, bi-directional graph
+    # create an orbit map as an unweighted, undirected graph
     graph = {}
 
     for source, target in edges:

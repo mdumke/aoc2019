@@ -44,16 +44,18 @@ def execute(code: List[int], input_: Iterable[int] = None) -> List[int]:
         x1 = i if modes[-1] == 1 else code[i]
         if x1 != 0:
             x2 = j if len(modes) >= 2 and modes[-2] == 1 else code[j]
-            code[ip] = x2
-            return True
+            return x2
+        else:
+            return ip + 3
 
     def jump_if_false(ip, modes):
         i, j = code[ip + 1:ip + 3]
         x1 = i if modes[-1] == 1 else code[i]
         if x1 == 0:
             x2 = j if len(modes) >= 2 and modes[-2] == 1 else code[j]
-            code[ip] = x2
-            return True
+            return x2
+        else:
+            return ip + 3
 
     def less_than(ip, modes):
         i, j, k = code[ip + 1:ip + 4]
@@ -95,11 +97,9 @@ def execute(code: List[int], input_: Iterable[int] = None) -> List[int]:
             read(ip, modes)
             ip += 2
         elif opcode == 5:
-            modified = jump_if_true(ip, modes)
-            ip = code[ip] if modified else ip + 3
+            ip = jump_if_true(ip, modes)
         elif opcode == 6:
-            modified = jump_if_false(ip, modes)
-            ip = code[ip] if modified else ip + 3
+            ip = jump_if_false(ip, modes)
         elif opcode == 7:
             less_than(ip, modes)
             ip += 4

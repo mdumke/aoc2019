@@ -72,7 +72,7 @@ class TestExecute(TestCase):
     def test_jump_if_true_mode_00_true(self):
         code = [5, 2, 3, 99]
         execute(code)
-        self.assertEqual(code, [99, 2, 3, 99])
+        self.assertEqual(code, [5, 2, 3, 99])
 
     def test_jump_if_true_mode_00_false(self):
         code = [5, 2, 0, 99]
@@ -82,17 +82,17 @@ class TestExecute(TestCase):
     def test_jump_if_true_mode_01_true(self):
         code = [105, 3, 4, 0, 99]
         execute(code)
-        self.assertEqual(code, [99, 3, 4, 0, 99])
+        self.assertEqual(code, [105, 3, 4, 0, 99])
 
     def test_jump_if_true_mode_11_true(self):
         code = [101105, 1, 99]
         execute(code)
-        self.assertEqual(code, [99, 1, 99])
+        self.assertEqual(code, [101105, 1, 99])
 
     def test_jump_if_false_mode_00_false(self):
         code = [6, 3, 4, 0, 99]
         execute(code)
-        self.assertEqual(code, [99, 3, 4, 0, 99])
+        self.assertEqual(code, [6, 3, 4, 0, 99])
 
     def test_jump_if_false_mode_00_true(self):
         code = [6, 4, 0, 99, 1]
@@ -102,12 +102,12 @@ class TestExecute(TestCase):
     def test_jump_if_false_mode_01_false(self):
         code = [106, 0, 4, 0, 99]
         execute(code)
-        self.assertEqual(code, [99, 0, 4, 0, 99])
+        self.assertEqual(code, [106, 0, 4, 0, 99])
 
     def test_jump_if_false_mode_11_false(self):
         code = [1001106, 0, 99]
         execute(code)
-        self.assertEqual(code, [99, 0, 99])
+        self.assertEqual(code, [1001106, 0, 99])
 
     def test_less_than_mode_00_true(self):
         code = [7, 5, 6, 7, 99, 1, 2, -1]

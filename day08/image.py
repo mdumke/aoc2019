@@ -13,13 +13,12 @@ def check_corruption(digits, width, height):
 def decode_image(digits, width, height):
     """Return image with first non-transparent layer-values for each pixel."""
     def keep_first_non_transparent(values):
-        for d in values:
-            if d != 2:
-                return d
+        for digit in values:
+            if digit != 2:
+                return digit
         return 2
 
-    layers = digits.reshape((-1, height, width))
-    img = np.dstack(layers)
+    img = np.dstack(digits.reshape((-1, height, width)))
     return np.apply_along_axis(keep_first_non_transparent, 2, img)
 
 

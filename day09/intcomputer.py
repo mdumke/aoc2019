@@ -3,20 +3,18 @@ from typing import List, Tuple
 
 class Intcomputer:
     def __init__(self, code: List[int]):
-        # initialize memory
         self.memory = [0] * 2**16
         self.memory[:len(code)] = code
-
-        self.ip = 0
         self.relative_base = 0
+        self.ip = 0
 
     def execute(self, input_ : int = None) -> Tuple[str, int]:
         """Run the program and return on output, missing input, or halt.
 
         Args:
-            input_ (int): An optional input value to supply to a read
-                instruction. If a read instruction finds no value,
-                it will pause and return the `WAITING` status
+            input_ (int): An optional input value to supply to a store_input
+                instruction. If this instruction finds no value,
+                it will return the `WAITING` status
 
         Returns:
             Tuple[str, int]: A pair (status, value) which indicates
@@ -33,27 +31,27 @@ class Intcomputer:
             i, j, k = self.memory[self.ip + 1:self.ip + 4]
 
             if modes[-1] == 0:
-                x1 = self.memory[i]
+                a = self.memory[i]
             elif modes[-1] == 1:
-                x1 = i
+                a = i
             elif modes[-1] == 2:
-                x1 = self.memory[self.relative_base + i]
+                a = self.memory[self.relative_base + i]
 
             if modes[-2] == 0:
-                x2 = self.memory[j]
+                b = self.memory[j]
             elif modes[-2] == 1:
-                x2 = j
+                b = j
             elif modes[-2] == 2:
-                x2 = self.memory[self.relative_base + j]
+                b = self.memory[self.relative_base + j]
 
             # assume that the 3rd parameter determines the address,
             # which is handled differently
             if modes[-3] == 0:
-                x3 = k
+                c = k
             elif modes[-3] == 2:
-                x3 = k + self.relative_base
+                c = k + self.relative_base
 
-            return x1, x2, x3
+            return a, b, c
 
         def add(modes):
             a, b, c = get_operands(modes)
@@ -91,13 +89,11 @@ class Intcomputer:
         def store_input(modes):
             nonlocal input_
             i = self.memory[self.ip + 1]
-
             if modes[-1] == 2:
                 i += self.relative_base
-
             self.memory[i] = input_
-            self.ip += 2
             input_ = None
+            self.ip += 2
 
         def write_output(modes):
             a, *_ = get_operands(modes)

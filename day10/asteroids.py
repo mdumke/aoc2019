@@ -26,24 +26,28 @@ def find_best_position(asteroids):
 
 
 def group_by_angle(asteroids, position):
-    """Return asteroids grouped by angle, then distance from position.
+    """Return asteroids grouped by angle, then sorted by distance from position.
 
-    Angle refers to the clockwise angle of the asteroid vector relative
-    to the vector that goes straigt up from the given position.
+    Angle refers to the clockwise angle of the position-asteroid-vector
+    relative to the vector that goes straigt upwards, i.e. (0, -1).
+
+    Example:
+
+    >>> group_by_angle(set([(2, 0), (1, 0), (0, 1)]), (0, 0))
+    [[(1, 0), (2, 0)], [(0, 1)]]
     """
-    def deg(asteroid):
+    def angle(asteroid):
         diff = np.subtract(asteroid, position)
-        angle = (360 - np.rad2deg(np.arctan2(*-diff))) % 360
-        return angle
+        return (360 - np.rad2deg(np.arctan2(*-diff))) % 360
 
     def dist(asteroid):
         diff = np.subtract(asteroid, position)
         return np.linalg.norm(diff)
 
     asteroids = [a for a in asteroids if a != position]
-    asteroids.sort(key=lambda a: (deg(a), dist(a)))
+    asteroids.sort(key=lambda a: (angle(a), dist(a)))
 
-    return [list(group) for _, group in groupby(asteroids, deg)]
+    return [list(group) for _, group in groupby(asteroids, angle)]
 
 
 def parse_input(asteroids):

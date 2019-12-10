@@ -1,5 +1,4 @@
 import numpy as np
-from tqdm import tqdm
 from collections import defaultdict
 
 
@@ -10,42 +9,39 @@ def find_best_position(asteroids):
     return best_position, counts[best_position]
 
 
-def count_visible(positions):
-    """Return number of positions in line of vision for each position."""
+def count_visible(asteroids):
+    """Return number of visible neighbors for each asteroid."""
     counts = defaultdict(int)
 
-    for source in tqdm(positions, ascii=True):
-        for target in positions:
-            if source == target:
+    for asteroid in asteroids:
+        for neighbor in asteroids:
+            if neighbor == asteroid:
                 continue
 
-            target_is_visible = True
-
-            for obstacle in positions:
-                if obstacle == source or obstacle == target:
-                    continue
-
-                if is_blocked(source, target, obstacle):
-                    target_is_visible = False
-
-            if target_is_visible:
-                counts[source] += 1
+            if is_visible(neighbor, asteroid, asteroids):
+                counts[asteroid] += 1
 
     return dict(counts)
 
 
-def is_blocked(source, target, obstacle):
-    """Return True if target is visible from source, not blocked by obstacle."""
-    dt = np.subtract(target, source)
-    do = np.subtract(obstacle, source)
+def is_visible(target, position, asteroids):
+    """Return True if target is visible from given position."""
+    # strategy: walk from postion to target in smallest possible steps
+    # that are still integers. If an asteroid is in the way, return False.
+    dx, dy = np.subtract(target, position)
 
-    # 1st condition: linear dependence of difference vectors
-    if np.linalg.matrix_rank([dt, do]) == 2:
-        return False
+    divisor = np.gcd(dx, dy)
+    dx = dx // divisor
+    dy = dy // divisor
 
-    # 2nd condition: obstacle must be between source and target
-    return np.alltrue(np.sign(dt) == np.sign(do)) and \
-           np.linalg.norm(do) < np.linalg.norm(dt)
+    current = tuple(np.add(position, [dx, dy]))
+
+    while not np.alltrue(current == target):
+        if current in asteroids:
+            return False
+        current = tuple(np.add(current, [dx, dy]))
+
+    return True
 
 
 def parse_input(asteroids):

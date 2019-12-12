@@ -6,12 +6,18 @@ from functools import reduce
 
 
 def compute_recurrence_period(pos, vel):
+    """Return the timesteps after which the original state reoccurs."""
+    # pre-compute enough states, then determine the period length
+    # for each body in each dimension for both position and velocity
     states = precompute_states(pos, vel, 400_000)
     periods = set([find_period(states[:, i]) for i in range(states.shape[1])])
+
+    # the total period length is the lcm of all individual periods
     return reduce(lambda a, b: a * b // np.gcd(a, b), periods)
 
 
 def find_period(values):
+    """Return the length of the recurrence period in the values."""
     i, j, boundary = 0, 1, 1
 
     while i <= len(values) // 2:
@@ -31,6 +37,7 @@ def find_period(values):
 
 
 def precompute_states(pos, vel, n):
+    """Return the next n states."""
     states = np.empty((n, pos.size + vel.size))
     for i in tqdm(range(n)):
         states[i] = np.r_[pos.flatten(), vel.flatten()]
@@ -39,6 +46,7 @@ def precompute_states(pos, vel, n):
 
 
 def update(pos, vel):
+    """Mutate position and velocity values for timestep."""
     # apply gravity
     for i, j in combinations(range(pos.shape[0]), 2):
         updates = np.sign(pos[i] - pos[j])
@@ -50,12 +58,14 @@ def update(pos, vel):
 
 
 def compute_total_energy(pos, vel):
+    """Return the sum of potential and kinetic energy."""
     pot = np.sum(np.abs(pos), axis=1)
     kin = np.sum(np.abs(vel), axis=1)
     return np.sum(pot * kin)
 
 
 def parse_input(puzzle):
+    """Return a matrix representation of the puzzle input."""
     return np.array([int(i) for i in re.findall('(-?\d+)', puzzle)])\
              .reshape(4, 3)
 

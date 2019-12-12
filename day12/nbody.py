@@ -8,12 +8,15 @@ from functools import reduce
 def compute_recurrence_period(pos, vel):
     """Return the timesteps after which the original state reoccurs."""
     # pre-compute enough states, then determine the period length
-    # for each body in each dimension for both position and velocity
+    # for each body in each dimension for both position and velocity,
+    # the overall period is the least common multiple of the individuals.
     states = precompute_states(pos, vel, 400_000)
-    periods = set([find_period(states[:, i]) for i in range(states.shape[1])])
+    return lcm(set(find_period(states[:, i]) for i in range(states.shape[1])))
 
-    # the total period length is the lcm of all individual periods
-    return reduce(lambda a, b: a * b // np.gcd(a, b), periods)
+
+def lcm(values):
+    """Return the least common multiple of all given values."""
+    return reduce(lambda a, b: a * b // np.gcd(a, b), values)
 
 
 def find_period(values):
@@ -58,7 +61,7 @@ def update(pos, vel):
 
 
 def compute_total_energy(pos, vel):
-    """Return the sum of potential and kinetic energy."""
+    """Return overall energy (potential and kinetic) of the system."""
     pot = np.sum(np.abs(pos), axis=1)
     kin = np.sum(np.abs(vel), axis=1)
     return np.sum(pot * kin)

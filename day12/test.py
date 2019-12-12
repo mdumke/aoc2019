@@ -44,3 +44,47 @@ class TestE2E(TestCase):
             update(pos, vel)
         self.assertEqual(compute_total_energy(pos, vel), 1940)
 
+
+class TestComputeRecurrencePeriod(TestCase):
+    def test_sample_1(self):
+        p = np.array([[-1, 0, 2], [2, -10, -7], [4, -8, 8], [3, 5, -1]])
+        v = np.zeros_like(p)
+        self.assertEqual(compute_recurrence_period(p, v), 2772)
+
+    def test_sample_2(self):
+        p = np.array([[-8, -10, 0], [5, 5, 10], [2, -7, 3], [9, -8, -3]])
+        v = np.zeros_like(p)
+        self.assertEqual(compute_recurrence_period(p, v), 4686774924)
+
+
+class TestFindPeriod(TestCase):
+    def test_identical(self):
+        values = [2, 2, 2, 2, 2, 2]
+        self.assertEqual(find_period(values), 1)
+
+    def test_two(self):
+        values = [1, 3, 1, 3, 1, 3]
+        self.assertEqual(find_period(values), 2)
+
+    def test_four(self):
+        values = [1, 2, 1, 3, 1, 2, 1, 3, 1, 2]
+        self.assertEqual(find_period(values), 4)
+
+    def test_from_sample_1(self):
+        values = [-1, 2, 5, 5, 2, -1, -1, 2, 5, 5, 2, -1, -1, 2, 5, 5]
+        self.assertEqual(find_period(values), 6)
+
+    def test_no_period(self):
+        values = [-1, 2, 5, 5, 2, -1, -1, 2]
+        try:
+            find_period(values)
+        except IndexError:
+            self.assertTrue(True)
+
+    def test_from_stress_test_a(self):
+        values = [0, 5, 0, 5, 3]
+        self.assertEqual(find_period(values), 2)
+
+    def test_from_stress_test_b(self):
+        values = [1, 2, 1, 0, 1, 2, 1, 2, 1, 0, 1, 2, 1, 2, 1, 0, 1, 2]
+        self.assertEqual(find_period(values), 6)

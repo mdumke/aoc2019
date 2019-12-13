@@ -1,4 +1,4 @@
-"""An arcade game playing an intcode game."""
+"""An arcade running an intcode game."""
 
 import numpy as np
 from intcomputer import Intcomputer

@@ -1,35 +1,67 @@
-import sys
+"""An arcade game playing an intcode game."""
+
 import numpy as np
 from intcomputer import Intcomputer
-from functools import reduce
 
 BLOCK = 2
+PADDLE = 3
+BALL = 4
 
 
 class Arcade:
-    def __init__(self, code):
-        self.tiles = self.compute_tiles(code)
+    def __init__(self, code, mode=1):
+        self.cpu = Intcomputer(code)
+        self.cpu.memory[0] = mode
+        self.tiles = np.empty((21, 40), dtype=np.int)
+        self.score = 0
+        self.x_ball = -1
+        self.x_paddle = -1
 
-    def compute_tiles(self, code):
-        computer = Intcomputer(code)
+    def play(self):
+        state = 'INIT'
+
+        while state != 'HALT':
+            state, output = self.step(state)
+            self.update(output)
+
+    def step(self, state):
         output = []
+
+        if state == 'WAITING':
+            move = np.sign(self.x_ball - self.x_paddle)
+            state, i = self.cpu.execute(move)
+            output.append(i)
+
         while True:
-            state, digit = computer.execute()
-            if state == 'HALT':
+            state, i = self.cpu.execute()
+            if state != 'OUTPUT':
                 break
-            output.append(digit)
-        return [tuple(row) for row in np.reshape(output, (-1, 3))]
+            output.append(i)
 
-    def count_blocks(self):
-        return reduce(lambda acc, tile: acc + int(tile[2] == BLOCK), self.tiles, 0)
+        return state, output
 
+    def update(self, output):
+        for x, y, value in np.reshape(output, (-1, 3)):
+            if x == -1 and y == 0:
+                self.score = value
+                continue
 
+            if value == BALL:
+                self.x_ball = x
+            if value == PADDLE:
+                self.x_paddle = x
 
-
-
+            self.tiles[y, x] = value
 
 
 if __name__ == '__main__':
-    arcade = Arcade([int(i) for i in sys.stdin.readline().split(',')])
-    print(arcade.count_blocks())
+    code = np.loadtxt('input.txt', delimiter=',', dtype=np.int)
+
+    arcade = Arcade(code, mode=1)
+    arcade.play()
+    print('part 1:', np.sum(arcade.tiles == BLOCK))
+
+    arcade = Arcade(code, mode=2)
+    arcade.play()
+    print('part 2:', arcade.score)
 

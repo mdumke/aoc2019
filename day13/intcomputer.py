@@ -7,6 +7,7 @@ class Intcomputer:
         self.memory[:len(code)] = code
         self.relative_base = 0
         self.ip = 0
+        self.ip_trace = []
 
     def execute(self, input_ : int = None) -> Tuple[str, int]:
         """Run the program and return on output, missing input, or halt.
@@ -101,6 +102,7 @@ class Intcomputer:
             return a
 
         while self.ip < len(self.memory):
+            self.ip_trace.append(self.ip)
             modes, opcode = parse_instruction()
 
             if opcode == 1:

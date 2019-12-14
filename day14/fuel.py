@@ -2,13 +2,29 @@ import math
 from collections import defaultdict, deque
 
 
-def ore_per_fuel_unit(reactions, batch_sizes):
+def fuel_from_ore(reactions, batch_sizes, capacity=10**12):
+    """Return Fuel units to produce under ore capacity constraints."""
+    lo, hi = 0, capacity
+
+    while lo < hi - 1:
+        fuel = lo + (hi - lo) // 2
+        ore = ore_per_fuel(reactions, batch_sizes, fuel)
+
+        if ore <= capacity:
+            lo = fuel
+        else:
+            hi = fuel
+
+    return lo
+
+
+def ore_per_fuel(reactions, batch_sizes, amount=1):
     """Return ORE necessary to produce min quantity of target material."""
     ore = 0
     overhead = defaultdict(int)
 
     fringe = deque()
-    fringe.append(('FUEL', 1))
+    fringe.append(('FUEL', amount))
 
     while fringe:
         target, target_units = fringe.pop()

@@ -21,7 +21,7 @@ class TestOREPerFuelUnit(TestCase):
             'E': {'A': 7, 'D': 1},
             'FUEL': {'A': 7, 'E': 1}}
 
-        self.assertEqual(ore_per_fuel(reactions, batch_sizes), 31)
+        self.assertEqual(get_required_ore(reactions, batch_sizes), 31)
 
     def test_sample_2(self):
         puzzle = """9 ORE => 2 A
@@ -32,7 +32,7 @@ class TestOREPerFuelUnit(TestCase):
             4 C, 1 A => 1 CA
             2 AB, 3 BC, 4 CA => 1 FUEL"""
         reactions, batch_sizes = parse_input(puzzle)
-        self.assertEqual(ore_per_fuel(reactions, batch_sizes), 165)
+        self.assertEqual(get_required_ore(reactions, batch_sizes), 165)
 
     def test_sample_3(self):
         puzzle = """157 ORE => 5 NZVS
@@ -45,7 +45,7 @@ class TestOREPerFuelUnit(TestCase):
             165 ORE => 2 GPVTF
             3 DCFZ, 7 NZVS, 5 HKGWZ, 10 PSHF => 8 KHKGT"""
         reactions, batch_sizes = parse_input(puzzle)
-        self.assertEqual(ore_per_fuel(reactions, batch_sizes), 13312)
+        self.assertEqual(get_required_ore(reactions, batch_sizes), 13312)
 
     def test_sample_4(self):
         puzzle = """2 VPVL, 7 FWMGM, 2 CXFTF, 11 MNCFX => 1 STKFG
@@ -61,7 +61,7 @@ class TestOREPerFuelUnit(TestCase):
             1 VJHF, 6 MNCFX => 4 RFSQX
             176 ORE => 6 VJHF"""
         reactions, batch_sizes = parse_input(puzzle)
-        self.assertEqual(ore_per_fuel(reactions, batch_sizes), 180697)
+        self.assertEqual(get_required_ore(reactions, batch_sizes), 180697)
 
     def test_sample_5(self):
         puzzle = """171 ORE => 8 CNZTR
@@ -82,7 +82,7 @@ class TestOREPerFuelUnit(TestCase):
             7 XCVML => 6 RJRHP
             5 BHXH, 4 VRPVC => 5 LTCX"""
         reactions, batch_sizes = parse_input(puzzle)
-        self.assertEqual(ore_per_fuel(reactions, batch_sizes), 2210736)
+        self.assertEqual(get_required_ore(reactions, batch_sizes), 2210736)
 
 
 class TestFuelFromOre(TestCase):
@@ -97,7 +97,7 @@ class TestFuelFromOre(TestCase):
             165 ORE => 2 GPVTF
             3 DCFZ, 7 NZVS, 5 HKGWZ, 10 PSHF => 8 KHKGT"""
         reactions, batch_sizes = parse_input(puzzle)
-        self.assertEqual(fuel_from_ore(reactions, batch_sizes), 82892753)
+        self.assertEqual(max_fuel(reactions, batch_sizes), 82892753)
 
     def test_sample_4(self):
         puzzle = """2 VPVL, 7 FWMGM, 2 CXFTF, 11 MNCFX => 1 STKFG
@@ -113,5 +113,5 @@ class TestFuelFromOre(TestCase):
             1 VJHF, 6 MNCFX => 4 RFSQX
             176 ORE => 6 VJHF"""
         reactions, batch_sizes = parse_input(puzzle)
-        self.assertEqual(fuel_from_ore(reactions, batch_sizes), 5586022)
+        self.assertEqual(max_fuel(reactions, batch_sizes), 5586022)
 

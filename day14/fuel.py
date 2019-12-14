@@ -2,15 +2,14 @@ import math
 from collections import defaultdict, deque
 
 
-def fuel_from_ore(reactions, batch_sizes, capacity=10**12):
-    """Return Fuel units to produce under ore capacity constraints."""
+def max_fuel(reactions, batch_sizes, capacity=10**12):
+    """Return maximum fuel units to produce under ORE capacity constraints."""
     lo, hi = 0, capacity
 
     while lo < hi - 1:
         fuel = lo + (hi - lo) // 2
-        ore = ore_per_fuel(reactions, batch_sizes, fuel)
 
-        if ore <= capacity:
+        if get_required_ore(reactions, batch_sizes, fuel) < capacity:
             lo = fuel
         else:
             hi = fuel
@@ -18,11 +17,10 @@ def fuel_from_ore(reactions, batch_sizes, capacity=10**12):
     return lo
 
 
-def ore_per_fuel(reactions, batch_sizes, amount=1):
-    """Return ORE necessary to produce min quantity of target material."""
+def get_required_ore(reactions, batch_sizes, amount=1):
+    """Return ORE necessary to produce the specified amount of fuel."""
     ore = 0
     overhead = defaultdict(int)
-
     fringe = deque()
     fringe.append(('FUEL', amount))
 
@@ -34,7 +32,6 @@ def ore_per_fuel(reactions, batch_sizes, amount=1):
             continue
 
         for source, source_units in reactions[target].items():
-            assert target_units % batch_sizes[target] == 0
             needed = target_units // batch_sizes[target] * source_units
 
             if overhead[source]:
